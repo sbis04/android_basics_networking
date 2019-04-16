@@ -35,15 +35,15 @@ import java.nio.charset.Charset;
  * Utility class with methods to help perform the HTTP request and
  * parse the response.
  */
-public final class Utils {
+final class Utils {
 
     /** Tag for the log messages */
-    public static final String LOG_TAG = Utils.class.getSimpleName();
+    private static final String LOG_TAG = Utils.class.getSimpleName();
 
     /**
      * Query the USGS dataset and return an {@link Event} object to represent a single earthquake.
      */
-    public static Event fetchEarthquakeData(String requestUrl) {
+    static Event fetchEarthquakeData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);
 
@@ -55,11 +55,7 @@ public final class Utils {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
 
-        // Extract relevant fields from the JSON response and create an {@link Event} object
-        Event earthquake = extractFeatureFromJson(jsonResponse);
-
-        // Return the {@link Event}
-        return earthquake;
+        return extractFeatureFromJson(jsonResponse);
     }
 
     /**
