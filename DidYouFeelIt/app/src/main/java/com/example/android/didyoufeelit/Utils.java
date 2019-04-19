@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2016 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.android.didyoufeelit;
 
 import android.text.TextUtils;
@@ -31,23 +16,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 
-/**
- * Utility class with methods to help perform the HTTP request and
- * parse the response.
- */
 final class Utils {
 
-    /** Tag for the log messages */
     private static final String LOG_TAG = Utils.class.getSimpleName();
 
-    /**
-     * Query the USGS dataset and return an {@link Event} object to represent a single earthquake.
-     */
     static Event fetchEarthquakeData(String requestUrl) {
-        // Create URL object
         URL url = createUrl(requestUrl);
 
-        // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
         try {
             jsonResponse = makeHttpRequest(url);
@@ -58,9 +33,6 @@ final class Utils {
         return extractFeatureFromJson(jsonResponse);
     }
 
-    /**
-     * Returns new URL object from the given string URL.
-     */
     private static URL createUrl(String stringUrl) {
         URL url = null;
         try {
@@ -71,13 +43,10 @@ final class Utils {
         return url;
     }
 
-    /**
-     * Make an HTTP request to the given URL and return a String as the response.
-     */
+
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
-        // If the URL is null, then return early.
         if (url == null) {
             return jsonResponse;
         }
@@ -91,8 +60,6 @@ final class Utils {
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
-            // If the request was successful (response code 200),
-            // then read the input stream and parse the response.
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
@@ -112,10 +79,7 @@ final class Utils {
         return jsonResponse;
     }
 
-    /**
-     * Convert the {@link InputStream} into a String which contains the
-     * whole JSON response from the server.
-     */
+
     private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         if (inputStream != null) {
@@ -130,12 +94,8 @@ final class Utils {
         return output.toString();
     }
 
-    /**
-     * Return an {@link Event} object by parsing out information
-     * about the first earthquake from the input earthquakeJSON string.
-     */
+
     private static Event extractFeatureFromJson(String earthquakeJSON) {
-        // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(earthquakeJSON)) {
             return null;
         }
@@ -144,18 +104,14 @@ final class Utils {
             JSONObject baseJsonResponse = new JSONObject(earthquakeJSON);
             JSONArray featureArray = baseJsonResponse.getJSONArray("features");
 
-            // If there are results in the features array
             if (featureArray.length() > 0) {
-                // Extract out the first feature (which is an earthquake)
                 JSONObject firstFeature = featureArray.getJSONObject(0);
                 JSONObject properties = firstFeature.getJSONObject("properties");
 
-                // Extract out the title, number of people, and perceived strength values
                 String title = properties.getString("title");
                 String numberOfPeople = properties.getString("felt");
                 String perceivedStrength = properties.getString("cdi");
 
-                // Create a new {@link Event} object
                 return new Event(title, numberOfPeople, perceivedStrength);
             }
         } catch (JSONException e) {

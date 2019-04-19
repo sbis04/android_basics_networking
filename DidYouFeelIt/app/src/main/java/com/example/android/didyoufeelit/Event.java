@@ -20,23 +20,10 @@ package com.example.android.didyoufeelit;
  */
 class Event {
 
-    /** Title of the earthquake event */
     final String title;
-
-    /** Number of people who felt the earthquake and reported how strong it was */
     final String numOfPeople;
-
-    /** Perceived strength of the earthquake from the people's responses */
     final String perceivedStrength;
 
-    /**
-     * Constructs a new {@link Event}.
-     *
-     * @param eventTitle is the title of the earthquake event
-     * @param eventNumOfPeople is the number of people who felt the earthquake and reported how
-     *                         strong it was
-     * @param eventPerceivedStrength is the perceived strength of the earthquake from the responses
-     */
     Event(String eventTitle, String eventNumOfPeople, String eventPerceivedStrength) {
         title = eventTitle;
         numOfPeople = eventNumOfPeople;
